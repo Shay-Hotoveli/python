@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main  # Change this if you're using a different branch
+      - main  
 
 jobs:
   build-and-push:
@@ -16,14 +16,14 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: berezovsky8
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USR }}
+          password: ${{ secrets.DOCKERHUB_PSW }}
 
       - name: Build Docker Image
-        run: docker build -t berezovsky8/devops-app:latest .
+        run: docker build -t ${{ secrets.DOCKERHUB_USR }}/devops-app:latest .
 
       - name: Push Docker Image to Docker Hub
-        run: docker push berezovsky8/devops-app:latest
+        run: docker push ${{ secrets.DOCKERHUB_USR }}/devops-app:latest
 
       - name: Run the container
-        run: docker run -d --name devops-python-app-container berezovsky8/devops-app:latest
+        run: docker run -d --name devops-python-app-container ${{ secrets.DOCKERHUB_USR }}/devops-app:latest
