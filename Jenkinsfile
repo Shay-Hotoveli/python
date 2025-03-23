@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'berezovsky8/devops-python-app'
+        DOCKER_IMAGE = 'shayhot/devops-python-app'
         DOCKER_TAG = 'latest'
     }
     stages {
@@ -13,19 +13,19 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Now clone the repository into a clean workspace.
-                sh 'git clone https://github.com/berezovsky13/python.git .'
+                sh 'git clone https://github.com/Shay-Hotoveli/python.git .'
             }
         }
         stage('Docker Build & Tag') {
             steps {
-                sh "docker build -t berezovsky8/devops-python-app:latest ."
+                sh "docker build -t shayhot/devops-python-app:latest ."
             }
         }
         
         stage('Docker Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                     sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
